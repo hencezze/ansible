@@ -1,0 +1,69 @@
+---
+    - name: Was Docker installed?
+      command: 'systemctl status docker'
+      ignore_errors: true
+      register: docker
+
+    - name: Check result, which has information about docker service
+      debug:
+        var: docker.failed
+
+    - name: Docker's block
+      block:
+
+        - name: Add Ubuntu Universe
+          apt_repository:
+            repo: deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
+            state: present
+
+        - name: Add Key Docker
+          apt_key:
+            url: https://download.docker.com/linux/ubuntu/gpg
+
+        - name: Preinstall Docker Packages
+          apt:
+            name: "{{ item }}"
+            state: present
+            cache_valid_time: 3600
+          loop: "{{ packages }}"
+
+        - name: Add Docker Universe
+          apt_repository:
+            repo: >
+              deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg]
+              https://download.docker.com/linux/ubuntu
+              {{ ansible_distribution_release }} stable
+            state: present
+            cache_valid_time: 3600
+
+        - name: Install Docker
+          apt:
+            name: "{{ item }}"
+            state: present
+          loop: "{{ docker1 }}"
+
+        - name: Check Installed Docker
+          service:
+            name: docker
+            state: restarted
+            enabled: yes
+
+      when: docker.failed == true
+
+    - name: Are docker-compose exist?
+      script:
+        cmd: ./check.sh
+      register: comp
+
+    - name: Check result, which has information about docker-compose service
+      debug:
+        var: comp
+
+    - name: docker-compose block
+      block:
+
+        - name: Install docker-compose
+          import_tasks: docker-compose.yml
+
+      when: comp.stdout_lines[0] == "False"
+

@@ -1,0 +1,46 @@
+---
+    - name: Was NGINX installed?
+      command: 'systemctl status "{{ item }}"'
+      ignore_errors: true
+      loop:
+        - nginx
+      register: nginx
+
+    - name: Check result, which has information about docker service
+      debug:
+        var: nginx.results[0].failed
+
+    - name: NGINX block
+      block:
+
+        - name: Install NGINX
+          apt:
+            name: nginx
+            state: present
+          when: nginx.results[0].failed == true
+
+        - name: htpasswd
+          command: 'htpasswd -c -b /etc/nginx/.htpasswd {{ username }} {{ passwd }}'
+
+        - name: Allow connections on HTTP port
+          iptables:
+            chain: INPUT
+            protocol: tcp
+            destination_port: 80
+            jump: ACCEPT
+
+        - name: Copy conf file
+          ansible.builtin.template:
+            src: default
+            dest: /etc/nginx/sites-enabled/default
+
+        - name: Copy site file
+          ansible.builtin.template:
+            src: index.html
+            dest: /var/www/html/index.html
+
+        - name: Restart NGINX
+          service:
+            name: nginx
+            state: restarted
+            enabled: yes
