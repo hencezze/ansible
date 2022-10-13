@@ -57,9 +57,9 @@
 
     - name: Check result, which has information about docker-compose service
       debug:
-        var: comp
+        var: comp.stdout_lines[0]
 
-    - name: docker-compose block
+    - name: Docker Compose block
       block:
 
         - name: Install docker-compose

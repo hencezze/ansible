@@ -1,7 +1,7 @@
 ---
 
 - hosts: localhost
-  user: jenk1
+  user: ub
   become: true
   become_method: su
   become_user: root
@@ -15,5 +15,5 @@
     - name: passwd
       prompt: Wait a password for NGINX user
   roles:
-    - docker-nginx-role
-    - nginx    
+    - docker-role
+    - nginx-role    

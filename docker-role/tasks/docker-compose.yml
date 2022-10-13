@@ -1,4 +1,4 @@
-- name: install docker-compose
+- name: Docker Compose | Install docker-compose
   apt:
     name: docker-compose
     state: present
