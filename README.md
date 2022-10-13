@@ -1,0 +1,1 @@
+# First yml script, which exact in main place designed for start two roles: nginx-role and docker-role, which has 2 additional steps, in first step they install docker, but check information about about its existence 
