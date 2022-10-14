@@ -1,6 +1,1 @@
-vars_prompt:
-    - name: username
-      prompt: Enter username for acess in NGINX
-      private: no
-    - name: passwd
-      prompt: Wait a password for NGINX user
+---
