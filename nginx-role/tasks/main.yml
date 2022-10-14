@@ -1,9 +1,7 @@
 ---
     - name: Was NGINX installed?
-      command: 'systemctl status "{{ item }}"'
+      command: 'systemctl status nginx'
       ignore_errors: true
-      loop:
-        - nginx
       register: nginx
 
     - name: Check result, which has information about docker service
