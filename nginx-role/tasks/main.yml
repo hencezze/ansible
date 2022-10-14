@@ -12,9 +12,7 @@
       block:
 
         - name: Install NGINX
-          apt:
-            name: nginx
-            state: present
+          import_name: install-nginx.yml
           when: nginx.results[0].failed == true
 
         - name: htpasswd
