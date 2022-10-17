@@ -1,4 +1,6 @@
 galaxy_info:
+  role_name: docker_role  # if absent directory name hosting role is used instead
+  namespace: docker_role  # if absent, author is used instead
   author: your name
   description: your role description
   company: your company (optional)

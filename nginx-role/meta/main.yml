@@ -1,4 +1,6 @@
 galaxy_info:
+  role_name: nginx_role  # if absent directory name hosting role is used instead
+  namespace: nginx_role
   author: your name
   description: your role description
   company: your company (optional)

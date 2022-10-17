@@ -11,15 +11,6 @@
     - name: Docker's block
       block:
 
-        - name: Add Ubuntu Universe
-          apt_repository:
-            repo: deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
-            state: present
-
-        - name: Add Key Docker
-          apt_key:
-            url: https://download.docker.com/linux/ubuntu/gpg
-
         - name: Preinstall Docker Packages
           apt:
             name: "{{ item }}"
@@ -27,26 +18,31 @@
             cache_valid_time: 3600
           loop: "{{ packages }}"
 
+
+        - name: Add Ubuntu Universe
+          apt_repository:
+            repo: deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
+            state: present
+          ignore_errors: true
+
+        - name: Add Key Docker
+          apt_key:
+            url: https://download.docker.com/linux/ubuntu/gpg
+
         - name: Add Docker Universe
           apt_repository:
             repo: >
               deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg]
               https://download.docker.com/linux/ubuntu
               {{ ansible_distribution_release }} stable
+            update_cache: no
             state: present
-            cache_valid_time: 3600
 
         - name: Install Docker
           apt:
             name: "{{ item }}"
             state: present
           loop: "{{ docker1 }}"
-
-        - name: Check Installed Docker
-          service:
-            name: docker
-            state: restarted
-            enabled: yes
 
       when: docker.failed == true
 
