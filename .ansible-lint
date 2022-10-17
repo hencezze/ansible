@@ -1,4 +1,0 @@
-skip_list:
-  - meta-incorrect
-  - meta-no-info
-  - role-name
