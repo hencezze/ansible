@@ -3,11 +3,6 @@
 - hosts: localhost
   user: jenk1
   become: true
-  become_method: su
-  become_user: root
-  vars:
-   packages: [apt-transport-https, ca-certificates, curl, gnupg, lsb-release, apache2-utils]
-   docker1: ['docker', 'docker.io']
   vars_prompt:
     - name: username
       prompt: Enter username for acess in NGINX
